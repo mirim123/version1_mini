@@ -17,7 +17,7 @@ cap = cv2.VideoCapture(file_path)
 # 프레임 속도를 1초를 환산
 fps = cap.get(cv2.CAP_PROP_FPS)
 # 속력을 계산할 때, 사용한 시간 7프레임 간격으로 속력 계산
-one_second = 1 * 7 / fps
+one_second = 1 * 5 / fps
 
 
 model = YOLO("best1.pt")
@@ -25,6 +25,7 @@ model1 = YOLO("yolov8n.pt")
 # 실시간으로 6초 180개의 frame을 저장할 리스트 dq 설정
 dq = deque(maxlen=180)
 frame_num = 0
+frame_count = 0
 
 # 탐지된 차량 저장 딕션너리
 
@@ -43,7 +44,11 @@ df = pd.DataFrame(
 
 while cap.isOpened():
     frame_num += 1
+    frame_count += 1
     direction = None
+
+    if frame_count % 2 != 0:
+        continue
 
     # print("Vehicle ID", vehicle_id)
     success, frame = cap.read()
